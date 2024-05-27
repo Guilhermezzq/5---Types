@@ -1,0 +1,36 @@
+React Three Rapier - Types
+
+A malha laranja esteja fixa, mas agindo como um spinner, onde gira e move e empurra qualquer objeto que colida com ele. Para fazer isso, precisamos usar um desses dois tipos, a posição cinemática ou a velocidade cinemática.
+
+Na velocidade cinemática, fornecemos a velocidade na qual queremos que o botão giratório gire ou se mova, e na posição cinemática fornecemos apenas a próxima posição e ela atualizará a velocidade do objeto de acordo.
+Ambos os tipos farão com que a malha laranja se mova e gire, mas optarei pela opção mais fácil que é a posição cinemática. type="kinematicPosition". 
+
+
+Dois métodos responsáveis ​​por mover e girar o corpo rígido.
+A primeira é a próxima translação cinemática definida.
+Este método é responsável por movimentar o corpo rígido e o conjunto seguinte, a rotação cinemática é responsável para girar o corpo rígido.
+
+A primeira é a próxima translação cinemática definida. Este método é responsável por movimentar o corpo rígido e o conjunto seguinte, a rotação cinemática é responsável para girar o corpo rígido.
+
+//1) setNextKinematTranslation() //Moving
+
+spinner.current.setNextKinematicTranslation({
+    x: 0,
+    y: Math.abs(Math.sin(getElapsedTime)),
+    z: 0,
+});
+
+//2) setNextKinematRotation()  // Rotation
+
+const eulerRotationAngle = new THREE.Euler(0, getElapsedTime, 0);
+const quaternionRotation = new THREE.Quaternion();
+quaternionRotation.setFromEuler(eulerRotationAngle);
+spinner.current.setNextKinematicRotation(quaternionRotation);
+
+
+
+Vamos fazer é começar a mover o cubo pressionando as teclas do teclado para que o cubo está acertando o botão giratório. Queremos mover o cubo para frente pressionando a tecla w, e para trás pressionando a tecla S, e para a direita pressionando a tecla e para a esquerda pressionando uma tecla e também queremos que o cubo salte pressionando a barra de espaço.
+
+Dre possui um auxiliar chamado Keyboard Controls, que nos permitirá ouvir a tecla pressionada. E então envolvendo a física vista pelos controles do teclado, esse foi o primeiro passo.
+
+A segunda etapa é adicionar o atributo map, no qual podemos fornecer cada chave que queremos observe escrevendo um array como este e no array podemos especificar cada chave escrevendo um objeto com o nome e a lista de chaves que deve acionar essa mudança como uma matriz. Portanto, cada chave será um objeto e você pode decidir qual nome deve dar à chave. E nessa matriz você pode decidir quais teclas do teclado devem acionar esse avanço.
